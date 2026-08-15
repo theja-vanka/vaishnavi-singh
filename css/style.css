@@ -55,6 +55,30 @@ img { max-width: 100%; display: block; }
 
 a { color: inherit; }
 
+/* ---------- Accessibility: skip link + focus states ---------- */
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 16px;
+  z-index: 1000;
+  background: var(--color-lavender-dark);
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.92rem;
+  text-decoration: none;
+  transition: top 0.2s ease;
+}
+.skip-link:focus {
+  top: 16px;
+}
+a:focus-visible,
+button:focus-visible {
+  outline: 3px solid var(--color-lavender-dark);
+  outline-offset: 3px;
+}
+
 .container {
   max-width: var(--max-width);
   margin: 0 auto;
@@ -225,22 +249,6 @@ ul.plain { list-style: none; margin: 0; padding: 0; }
   grid-template-columns: 1.2fr 0.8fr;
   gap: 56px;
   align-items: center;
-}
-.hero-eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 0.8rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--color-navy);
-  font-weight: 700;
-  background: var(--color-card);
-  border: 1px solid rgba(124, 111, 207, 0.28);
-  padding: 8px 18px 8px 14px;
-  border-radius: 999px;
-  margin-bottom: 22px;
-  box-shadow: var(--shadow-sm);
 }
 .pulse-dot {
   position: relative;
@@ -520,9 +528,6 @@ ul.plain { list-style: none; margin: 0; padding: 0; }
   pointer-events: none;
 }
 .field-note .fn-label,
-.field-note-text {
-  position: relative;
-}
 .field-note .fn-label {
   display: block;
   font-family: var(--font-body);
@@ -1267,13 +1272,25 @@ ul.plain { list-style: none; margin: 0; padding: 0; }
 .contact-section .eyebrow { color: var(--color-lavender); }
 .contact-section h2 { color: #fff; }
 .contact-section .lede { color: #c7ccdf; }
+.contact-section .btn-ghost {
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.35);
+}
+.contact-section .btn-ghost:hover { border-color: #fff; background: rgba(255, 255, 255, 0.06); }
 .contact-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 48px;
   align-items: start;
 }
-.contact-cta { margin-top: 28px; }
+.contact-cta-row { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 28px; }
+.contact-cta { margin-top: 0; }
+.contact-cta-row .btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.contact-cta-row .btn-ghost .icon-mono { width: 17px; height: 17px; }
 .contact-card {
   background: rgba(255, 255, 255, 0.045);
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -1409,7 +1426,6 @@ ul.plain { list-style: none; margin: 0; padding: 0; }
   .nav-links a { padding: 10px 0; display: block; }
   .nav-toggle { display: inline-block; }
   section { padding: 64px 0; }
-  .hero-eyebrow { border-radius: 16px; font-size: 0.72rem; align-items: flex-start; }
   .pulse-dot { margin-top: 5px; }
   .case-card .case-sub { border-radius: 12px; }
   .grid-3, .grid-2 { grid-template-columns: 1fr; }
