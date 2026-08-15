@@ -1301,7 +1301,7 @@ ul.plain { list-style: none; margin: 0; padding: 0; }
 .contact-list { list-style: none; margin: -10px; padding: 0; }
 .contact-row {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 16px;
   margin-bottom: 8px;
   padding: 10px;
@@ -1330,23 +1330,41 @@ ul.plain { list-style: none; margin: 0; padding: 0; }
 .contact-row:nth-child(3) .contact-icon svg { color: #f39aad; }
 .contact-row:nth-child(4) .contact-icon { background: rgba(240, 166, 62, 0.18); border-color: rgba(240, 166, 62, 0.32); }
 .contact-row:nth-child(4) .contact-icon svg { color: #f5c988; }
-.contact-text { color: #c7ccdf; padding-top: 6px; }
+.contact-row:nth-child(5) .contact-icon { background: rgba(126, 158, 232, 0.18); border-color: rgba(126, 158, 232, 0.32); }
+.contact-row:nth-child(5) .contact-icon svg { color: #9db6f0; }
+.contact-text { color: #c7ccdf; }
 .contact-list a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   text-decoration: none;
   font-size: 1.05rem;
+  font-weight: 600;
   color: #fff;
-  border-bottom: 1px solid rgba(255,255,255,0.25);
-  padding-bottom: 2px;
-  transition: border-color 0.15s ease, color 0.15s ease;
+  opacity: 0.94;
+  transition: opacity 0.15s ease, color 0.15s ease;
 }
-.contact-list a:hover { color: var(--color-lavender); border-color: var(--color-lavender); }
+.contact-list a::after {
+  content: "→";
+  opacity: 0;
+  transform: translateX(-3px);
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+.contact-list a:hover { opacity: 1; }
+.contact-list a:hover::after { opacity: 1; transform: translateX(0); }
+.contact-row:nth-child(1) .contact-list a:hover { color: #b7addf; }
+.contact-row:nth-child(2) .contact-list a:hover { color: #6fd6c4; }
+.contact-row:nth-child(3) .contact-list a:hover { color: #f39aad; }
+.contact-row:nth-child(4) .contact-list a:hover { color: #f5c988; }
+.contact-row:nth-child(5) .contact-list a:hover { color: #9db6f0; }
 .contact-list .contact-label {
   display: block;
   font-size: 0.72rem;
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: #9098b5;
-  margin-bottom: 4px;
+  margin-bottom: 5px;
 }
 .contact-quote {
   position: relative;
