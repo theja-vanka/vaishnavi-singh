@@ -1154,6 +1154,36 @@ ul.plain { list-style: none; margin: 0; padding: 0; }
 .partner-chip:nth-child(2) .chip-icon { background: var(--color-teal-soft); color: var(--color-teal-dark); }
 .partner-chip:nth-child(3) .chip-icon { background: var(--color-coral-soft); color: var(--color-coral-dark); }
 
+/* Longer partner roster: a card grid rather than chips, so school names of
+   very different lengths still line up. */
+.school-grid {
+  display: grid;
+  /* min() keeps the 280px track from overflowing containers narrower than it */
+  grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+  gap: 12px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.school-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 16px;
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  box-shadow: var(--shadow-sm);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-ink);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+.school-item:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.school-item:nth-child(3n+1) .chip-icon { background: var(--color-lavender-soft); color: var(--color-lavender-dark); }
+.school-item:nth-child(3n+2) .chip-icon { background: var(--color-teal-soft); color: var(--color-teal-dark); }
+.school-item:nth-child(3n+3) .chip-icon { background: var(--color-coral-soft); color: var(--color-coral-dark); }
+
 /* ---------- Engagement mini sections ---------- */
 .engagement-block {
   display: grid;
