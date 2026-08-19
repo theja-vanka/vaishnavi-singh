@@ -293,7 +293,7 @@ ul.plain { list-style: none; margin: 0; padding: 0; }
   display: inline-block;
   width: 28px;
   height: 2px;
-  background: var(--color-coral);
+  background: var(--color-lavender);
   flex-shrink: 0;
   transform: translateY(-4px);
 }
