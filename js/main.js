@@ -324,7 +324,14 @@ document.addEventListener("DOMContentLoaded", function () {
       // the previous wrap's invisible snap-back has settled, which would
       // otherwise compute an index one past either clone.
       index = Math.max(0, Math.min(index, lastSlideIndex));
-      allSlides[index].scrollIntoView({ behavior: behavior, inline: "start", block: "nearest" });
+      // Scroll the track itself rather than using scrollIntoView, which also
+      // scrolls every ancestor container — including the page — and would
+      // yank the visitor down to this section on load.
+      var slide = allSlides[index];
+      var offset = slide.getBoundingClientRect().left
+        - caseTrack.getBoundingClientRect().left
+        + caseTrack.scrollLeft;
+      caseTrack.scrollTo({ left: offset, behavior: behavior });
     }
 
     function updateCaseState() {
