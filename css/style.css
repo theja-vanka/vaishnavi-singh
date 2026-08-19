@@ -1695,7 +1695,6 @@ body.lightbox-open { overflow: hidden; }
   background: var(--color-ink);
   border-top: 1px solid rgba(255,255,255,0.08);
 }
-.site-footer a { color: var(--color-lavender); text-decoration: none; }
 
 /* ---------- Reveal-on-scroll ---------- */
 .reveal {
