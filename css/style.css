@@ -665,30 +665,6 @@ ul.plain { list-style: none; margin: 0; padding: 0; }
 
 /* ---------- Philosophy section header ---------- */
 .philosophy-header { max-width: 720px; }
-.philosophy-title {
-  font-size: clamp(2.3rem, 5.2vw, 3.4rem);
-  letter-spacing: -0.01em;
-  margin-bottom: 14px;
-}
-.philosophy-tagline {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  font-family: var(--font-display);
-  font-style: italic;
-  font-weight: 600;
-  font-size: clamp(1.3rem, 2.6vw, 1.65rem);
-  color: var(--color-lavender-dark);
-  margin: 0 0 22px;
-}
-.philosophy-tagline .tagline-mark {
-  display: inline-block;
-  width: 34px;
-  height: 2px;
-  background: var(--color-lavender);
-  flex-shrink: 0;
-}
-.philosophy-header .lede { margin-top: 2px; }
 
 /* ---------- Surface panel (Look Beneath the Surface) ---------- */
 .surface-panel {
