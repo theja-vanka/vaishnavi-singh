@@ -20,9 +20,9 @@
   --color-teal: #14a38c;
   --color-teal-dark: #0c7c69;
   --color-teal-soft: #ddf5f0;
-  --color-coral: #ee5d7a;
-  --color-coral-dark: #d13d5c;
-  --color-coral-soft: #fce3e9;
+  --color-coral: #ee5da3;
+  --color-coral-dark: #d13d86;
+  --color-coral-soft: #fce3f0;
   --color-amber: #f0a63e;
   --color-amber-dark: #c97f14;
   --color-amber-soft: #fdefda;
@@ -238,7 +238,7 @@ ul.plain { list-style: none; margin: 0; padding: 0; }
   align-items: center;
   padding: 56px 0;
   background:
-    radial-gradient(circle at 85% 8%, rgba(238, 93, 122, 0.14) 0%, transparent 38%),
+    radial-gradient(circle at 85% 8%, rgba(238, 93, 163, 0.14) 0%, transparent 38%),
     radial-gradient(circle at 70% 30%, var(--color-lavender-soft) 0%, transparent 42%),
     radial-gradient(circle at 5% 90%, rgba(20, 163, 140, 0.14) 0%, transparent 42%),
     radial-gradient(circle at 15% 60%, var(--color-navy-soft) 0%, transparent 38%);
@@ -559,7 +559,7 @@ ul.plain { list-style: none; margin: 0; padding: 0; }
 .field-note.fn-teal { background: linear-gradient(140deg, var(--color-teal-soft) 0%, var(--color-card) 125%); border-color: rgba(20, 163, 140, 0.22); }
 .field-note.fn-teal::before,
 .field-note.fn-teal .fn-label { color: var(--color-teal-dark); }
-.field-note.fn-coral { background: linear-gradient(140deg, var(--color-coral-soft) 0%, var(--color-card) 125%); border-color: rgba(238, 93, 122, 0.22); }
+.field-note.fn-coral { background: linear-gradient(140deg, var(--color-coral-soft) 0%, var(--color-card) 125%); border-color: rgba(238, 93, 163, 0.22); }
 .field-note.fn-coral::before,
 .field-note.fn-coral .fn-label { color: var(--color-coral-dark); }
 .field-note.fn-amber { background: linear-gradient(140deg, var(--color-amber-soft) 0%, var(--color-card) 125%); border-color: rgba(240, 166, 62, 0.22); }
@@ -1559,7 +1559,7 @@ body.lightbox-open { overflow: hidden; }
 .contact-section {
   background:
     radial-gradient(circle at 12% 8%, rgba(124, 111, 207, 0.24) 0%, transparent 40%),
-    radial-gradient(circle at 90% 20%, rgba(238, 93, 122, 0.14) 0%, transparent 38%),
+    radial-gradient(circle at 90% 20%, rgba(238, 93, 163, 0.14) 0%, transparent 38%),
     radial-gradient(circle at 92% 88%, rgba(20, 163, 140, 0.16) 0%, transparent 40%),
     var(--color-ink);
   color: #eef0f8;
@@ -1623,7 +1623,7 @@ body.lightbox-open { overflow: hidden; }
 .contact-row:nth-child(1) .contact-icon svg { color: #b7addf; }
 .contact-row:nth-child(2) .contact-icon { background: rgba(20, 163, 140, 0.18); border-color: rgba(20, 163, 140, 0.32); }
 .contact-row:nth-child(2) .contact-icon svg { color: #6fd6c4; }
-.contact-row:nth-child(3) .contact-icon { background: rgba(238, 93, 122, 0.18); border-color: rgba(238, 93, 122, 0.32); }
+.contact-row:nth-child(3) .contact-icon { background: rgba(238, 93, 163, 0.18); border-color: rgba(238, 93, 163, 0.32); }
 .contact-row:nth-child(3) .contact-icon svg { color: #f39aad; }
 .contact-row:nth-child(4) .contact-icon { background: rgba(240, 166, 62, 0.18); border-color: rgba(240, 166, 62, 0.32); }
 .contact-row:nth-child(4) .contact-icon svg { color: #f5c988; }
