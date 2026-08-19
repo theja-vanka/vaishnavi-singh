@@ -274,47 +274,80 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-  // ---------- Case studies carousel ----------
+  // ---------- Case studies carousel (seamless circular loop) ----------
   var caseTrack = document.querySelector("[data-case-track]");
   if (caseTrack) {
-    var caseCards = Array.prototype.slice.call(caseTrack.children);
+    var realCards = Array.prototype.slice.call(caseTrack.children);
+    var realCount = realCards.length;
     var casePrev = document.querySelector("[data-case-prev]");
     var caseNext = document.querySelector("[data-case-next]");
     var caseDots = Array.prototype.slice.call(document.querySelectorAll("[data-case-dot]"));
 
-    function caseGoTo(index) {
-      index = Math.max(0, Math.min(index, caseCards.length - 1));
-      caseCards[index].scrollIntoView({ behavior: "smooth", inline: "start", block: "nearest" });
+    // True circular motion (not just "doesn't stop at the ends") needs every
+    // step — including the wrap — to play the identical scroll animation.
+    // The standard way to do that with native scroll-snap: clone the last
+    // card in front of the first, and the first card after the last, so
+    // scrolling "past" either end just continues smoothly onto a clone that
+    // looks pixel-identical to the real card — then silently (no animation)
+    // re-point to the real one underneath it.
+    var lastClone = realCards[realCount - 1].cloneNode(true);
+    var firstClone = realCards[0].cloneNode(true);
+    lastClone.classList.add("is-clone");
+    firstClone.classList.add("is-clone");
+    lastClone.setAttribute("aria-hidden", "true");
+    firstClone.setAttribute("aria-hidden", "true");
+    caseTrack.insertBefore(lastClone, realCards[0]);
+    caseTrack.appendChild(firstClone);
+
+    var allSlides = Array.prototype.slice.call(caseTrack.children); // [lastClone, real×N, firstClone]
+    var lastSlideIndex = allSlides.length - 1;
+
+    function realIndexOfSlide(slideIndex) {
+      if (slideIndex === 0) { return realCount - 1; }
+      if (slideIndex === lastSlideIndex) { return 0; }
+      return slideIndex - 1;
     }
 
-    function updateCaseState() {
-      // Find the card whose left edge is closest to the track's own left edge
+    function currentSlideIndex() {
       var trackLeft = caseTrack.getBoundingClientRect().left;
       var closest = 0;
       var closestDist = Infinity;
-      caseCards.forEach(function (card, i) {
-        var dist = Math.abs(card.getBoundingClientRect().left - trackLeft);
+      allSlides.forEach(function (slide, i) {
+        var dist = Math.abs(slide.getBoundingClientRect().left - trackLeft);
         if (dist < closestDist) { closestDist = dist; closest = i; }
       });
-      caseDots.forEach(function (dot, i) { dot.classList.toggle("is-active", i === closest); });
-      if (casePrev) { casePrev.disabled = closest === 0; }
-      if (caseNext) { caseNext.disabled = closest === caseCards.length - 1; }
+      return closest;
+    }
+
+    function goToSlide(index, behavior) {
+      // Clamp defensively: a rapid double-click on prev/next can fire before
+      // the previous wrap's invisible snap-back has settled, which would
+      // otherwise compute an index one past either clone.
+      index = Math.max(0, Math.min(index, lastSlideIndex));
+      allSlides[index].scrollIntoView({ behavior: behavior, inline: "start", block: "nearest" });
+    }
+
+    function updateCaseState() {
+      var closest = currentSlideIndex();
+      caseDots.forEach(function (dot, i) { dot.classList.toggle("is-active", i === realIndexOfSlide(closest)); });
+      // Landed on a clone (via button, swipe, or trackpad) — re-point to the
+      // matching real card with no animation; it's the same pixels, so the
+      // switch is invisible and the loop keeps going indefinitely.
+      if (closest === 0) {
+        goToSlide(realCount, "instant");
+      } else if (closest === lastSlideIndex) {
+        goToSlide(1, "instant");
+      }
     }
 
     if (casePrev) {
-      casePrev.addEventListener("click", function () {
-        var current = caseDots.findIndex(function (d) { return d.classList.contains("is-active"); });
-        caseGoTo(current - 1);
-      });
+      casePrev.addEventListener("click", function () { goToSlide(currentSlideIndex() - 1, "smooth"); });
     }
     if (caseNext) {
-      caseNext.addEventListener("click", function () {
-        var current = caseDots.findIndex(function (d) { return d.classList.contains("is-active"); });
-        caseGoTo(current + 1);
-      });
+      caseNext.addEventListener("click", function () { goToSlide(currentSlideIndex() + 1, "smooth"); });
     }
     caseDots.forEach(function (dot, i) {
-      dot.addEventListener("click", function () { caseGoTo(i); });
+      dot.addEventListener("click", function () { goToSlide(i + 1, "smooth"); });
     });
 
     var caseScrollTimer;
@@ -323,6 +356,7 @@ document.addEventListener("DOMContentLoaded", function () {
       caseScrollTimer = setTimeout(updateCaseState, 100);
     }, { passive: true });
     window.addEventListener("resize", updateCaseState);
+    goToSlide(1, "instant"); // land on the real first card, skipping the prepended clone
     updateCaseState();
   }
 });

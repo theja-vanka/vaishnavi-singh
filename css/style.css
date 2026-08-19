@@ -978,24 +978,27 @@ ul.plain { list-style: none; margin: 0; padding: 0; }
   margin-bottom: 14px;
 }
 .case-card-head .icon-badge { margin-bottom: 0; }
-.case-card:nth-child(1) { border-top-color: var(--color-lavender); }
-.case-card:nth-child(1) .case-index { color: var(--color-lavender); }
-.case-card:nth-child(1) .icon-badge { background: var(--color-lavender-soft); }
-.case-card:nth-child(1) .icon-badge svg { color: var(--color-lavender-dark); }
-.case-card:nth-child(1) .case-sub { background: var(--color-lavender-soft); color: var(--color-lavender-dark); }
-.case-card:nth-child(1) .case-list li::before { background: var(--color-lavender); }
-.case-card:nth-child(2) { border-top-color: var(--color-teal); }
-.case-card:nth-child(2) .case-index { color: var(--color-teal); }
-.case-card:nth-child(2) .icon-badge { background: var(--color-teal-soft); }
-.case-card:nth-child(2) .icon-badge svg { color: var(--color-teal-dark); }
-.case-card:nth-child(2) .case-sub { background: var(--color-teal-soft); color: var(--color-teal-dark); }
-.case-card:nth-child(2) .case-list li::before { background: var(--color-teal); }
-.case-card:nth-child(3) { border-top-color: var(--color-coral); }
-.case-card:nth-child(3) .case-index { color: var(--color-coral); }
-.case-card:nth-child(3) .icon-badge { background: var(--color-coral-soft); }
-.case-card:nth-child(3) .icon-badge svg { color: var(--color-coral-dark); }
-.case-card:nth-child(3) .case-sub { background: var(--color-coral-soft); color: var(--color-coral-dark); }
-.case-card:nth-child(3) .case-list li::before { background: var(--color-coral); }
+/* Explicit per-card classes rather than :nth-child — the carousel JS clones
+   the first/last card to build a seamless loop, which shifts DOM position
+   but keeps these classes (cloneNode copies them), so the colors stay correct. */
+.case-card-1 { border-top-color: var(--color-lavender); }
+.case-card-1 .case-index { color: var(--color-lavender); }
+.case-card-1 .icon-badge { background: var(--color-lavender-soft); }
+.case-card-1 .icon-badge svg { color: var(--color-lavender-dark); }
+.case-card-1 .case-sub { background: var(--color-lavender-soft); color: var(--color-lavender-dark); }
+.case-card-1 .case-list li::before { background: var(--color-lavender); }
+.case-card-2 { border-top-color: var(--color-teal); }
+.case-card-2 .case-index { color: var(--color-teal); }
+.case-card-2 .icon-badge { background: var(--color-teal-soft); }
+.case-card-2 .icon-badge svg { color: var(--color-teal-dark); }
+.case-card-2 .case-sub { background: var(--color-teal-soft); color: var(--color-teal-dark); }
+.case-card-2 .case-list li::before { background: var(--color-teal); }
+.case-card-3 { border-top-color: var(--color-coral); }
+.case-card-3 .case-index { color: var(--color-coral); }
+.case-card-3 .icon-badge { background: var(--color-coral-soft); }
+.case-card-3 .icon-badge svg { color: var(--color-coral-dark); }
+.case-card-3 .case-sub { background: var(--color-coral-soft); color: var(--color-coral-dark); }
+.case-card-3 .case-list li::before { background: var(--color-coral); }
 .case-card .case-index {
   font-family: var(--font-display);
   font-size: 0.9rem;
