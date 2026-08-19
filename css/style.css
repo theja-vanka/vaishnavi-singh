@@ -1772,4 +1772,15 @@ body.lightbox-open { overflow: hidden; }
   .outcome-list { grid-template-columns: 1fr; }
   .sample-roles { grid-template-columns: 1fr; gap: 22px; }
   .sample-box { padding: 26px 22px; }
+  .flow {
+    flex-direction: column;
+    justify-content: center;
+    gap: 12px;
+    padding: 28px 22px;
+  }
+  .flow-step { width: 100%; min-width: 0; flex: none; }
+  .flow span.arrow {
+    transform: rotate(90deg);
+    line-height: 1;
+  }
 }
