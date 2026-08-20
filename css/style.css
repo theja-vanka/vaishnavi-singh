@@ -763,98 +763,126 @@ ul.plain { list-style: none; margin: 0; padding: 0; }
 .icon-mono { flex-shrink: 0; }
 
 /* ---------- Timeline (My Journey) ---------- */
+/* Each stage sets one --acc trio; the dot's gradient, the connecting line's
+   fade into the next stage, the card's top bar, the ghost numeral and the
+   lens pill all derive from it, so the four stages read as a single
+   progression rather than four unrelated cards with a number stuck on. */
 .timeline {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 22px;
   position: relative;
-  max-width: 640px;
+  max-width: 700px;
   margin: 0 auto;
+  counter-reset: journey;
 }
-.timeline-step { display: flex; align-items: stretch; gap: 20px; }
+.timeline-step { display: flex; align-items: stretch; counter-increment: journey; }
+/* The rail stretches to the card's full height (align-items: stretch above),
+   so positioning the dot at an absolute 50% centers it on the card itself —
+   the connector is a single line for that same full height, extended past
+   the rail's own box by exactly the outer .timeline gap so it keeps flowing
+   into the next card's rail rather than breaking in the gap between cards. */
 .timeline-rail {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 30px;
+  position: relative;
+  width: 36px;
   flex-shrink: 0;
 }
 .timeline-dot {
-  width: 30px;
-  height: 30px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
-  background: var(--color-lavender);
-  border: 3px solid var(--color-bg-alt);
-  box-shadow: 0 0 0 2px var(--color-lavender);
-  flex-shrink: 0;
+  background: linear-gradient(135deg, var(--acc) 0%, var(--acc-dark) 100%);
+  box-shadow: 0 0 0 5px var(--acc-soft), 0 6px 14px -4px var(--acc-dark);
+  z-index: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: var(--font-body);
+  font-family: var(--font-display);
   font-weight: 700;
-  font-size: 0.85rem;
+  font-size: 0.92rem;
   color: #fff;
 }
 .timeline-connector {
-  width: 2px;
-  flex: 1;
-  min-height: 24px;
-  background: var(--color-lavender);
-  opacity: 0.35;
-  margin-top: 4px;
+  position: absolute;
+  top: 0;
+  bottom: -22px;
+  left: 50%;
+  width: 3px;
+  transform: translateX(-50%);
+  border-radius: 2px;
+  background: linear-gradient(to bottom, var(--acc) 0%, var(--acc-next, var(--acc)) 100%);
 }
-.timeline-step:last-child .timeline-connector { display: none; }
+.timeline-step:last-child .timeline-connector { bottom: 0; }
 .timeline-card {
+  position: relative;
+  overflow: hidden;
   background: var(--color-card);
   border-radius: 16px;
-  padding: 26px 22px 22px;
+  padding: 28px 26px 24px;
   flex: 1;
   box-shadow: var(--shadow-sm);
-  border-top: 3px solid var(--color-lavender);
   display: flex;
   flex-direction: column;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
-.timeline-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
-.timeline-card .icon-badge { width: 40px; height: 40px; border-radius: 10px; margin-bottom: 14px; }
-.timeline-card .icon-badge svg { width: 20px; height: 20px; }
-.timeline-step h4 {
-  font-family: var(--font-body);
-  font-weight: 700;
-  font-size: 0.78rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--color-navy);
-  margin-bottom: 12px;
+.timeline-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--acc) 0%, var(--acc-soft) 100%);
 }
-.timeline-step:nth-child(1) .timeline-dot { background: var(--color-lavender); box-shadow: 0 0 0 2px var(--color-lavender); }
-.timeline-step:nth-child(1) .timeline-connector { background: var(--color-lavender); }
-.timeline-step:nth-child(1) .timeline-card { border-top-color: var(--color-lavender); }
-.timeline-step:nth-child(1) .icon-badge { background: var(--color-lavender-soft); }
-.timeline-step:nth-child(1) .icon-badge svg { color: var(--color-lavender-dark); }
-.timeline-step:nth-child(1) h4 { color: var(--color-lavender-dark); }
-.timeline-step:nth-child(1) .tl-lens { background: var(--color-lavender-soft); color: var(--color-lavender-dark); }
-.timeline-step:nth-child(2) .timeline-dot { background: var(--color-teal); box-shadow: 0 0 0 2px var(--color-teal); }
-.timeline-step:nth-child(2) .timeline-connector { background: var(--color-teal); }
-.timeline-step:nth-child(2) .timeline-card { border-top-color: var(--color-teal); }
-.timeline-step:nth-child(2) .icon-badge { background: var(--color-teal-soft); }
-.timeline-step:nth-child(2) .icon-badge svg { color: var(--color-teal-dark); }
-.timeline-step:nth-child(2) h4 { color: var(--color-teal-dark); }
-.timeline-step:nth-child(2) .tl-lens { background: var(--color-teal-soft); color: var(--color-teal-dark); }
-.timeline-step:nth-child(3) .timeline-dot { background: var(--color-coral); box-shadow: 0 0 0 2px var(--color-coral); }
-.timeline-step:nth-child(3) .timeline-connector { background: var(--color-coral); }
-.timeline-step:nth-child(3) .timeline-card { border-top-color: var(--color-coral); }
-.timeline-step:nth-child(3) .icon-badge { background: var(--color-coral-soft); }
-.timeline-step:nth-child(3) .icon-badge svg { color: var(--color-coral-dark); }
-.timeline-step:nth-child(3) h4 { color: var(--color-coral-dark); }
-.timeline-step:nth-child(3) .tl-lens { background: var(--color-coral-soft); color: var(--color-coral-dark); }
-.timeline-step:nth-child(4) .timeline-dot { background: var(--color-amber); box-shadow: 0 0 0 2px var(--color-amber); }
-.timeline-step:nth-child(4) .timeline-connector { background: var(--color-amber); }
-.timeline-step:nth-child(4) .timeline-card { border-top-color: var(--color-amber); }
-.timeline-step:nth-child(4) .icon-badge { background: var(--color-amber-soft); }
-.timeline-step:nth-child(4) .icon-badge svg { color: var(--color-amber-dark); }
-.timeline-step:nth-child(4) h4 { color: var(--color-amber-dark); }
-.timeline-step:nth-child(4) .tl-lens { background: var(--color-amber-soft); color: var(--color-amber-dark); }
+/* A large pale numeral bleeding off the corner replaces the old literal
+   icon — decorative, not another picture to parse, and it makes the stage
+   number felt rather than just labelled on the rail dot. */
+.timeline-card::after {
+  content: counter(journey, decimal-leading-zero);
+  position: absolute;
+  top: -0.28em;
+  right: 0.08em;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 4.2rem;
+  line-height: 1;
+  color: var(--acc-soft);
+  z-index: 0;
+}
+.timeline-card > * { position: relative; z-index: 1; }
+.timeline-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+.timeline-step h4 {
+  font-size: 1.2rem;
+  color: var(--acc-dark);
+  margin: 0 0 14px;
+}
+.timeline-step:nth-child(1) {
+  --acc: var(--color-lavender);
+  --acc-dark: var(--color-lavender-dark);
+  --acc-soft: var(--color-lavender-soft);
+  --acc-next: var(--color-teal);
+}
+.timeline-step:nth-child(2) {
+  --acc: var(--color-teal);
+  --acc-dark: var(--color-teal-dark);
+  --acc-soft: var(--color-teal-soft);
+  --acc-next: var(--color-coral);
+}
+.timeline-step:nth-child(3) {
+  --acc: var(--color-coral);
+  --acc-dark: var(--color-coral-dark);
+  --acc-soft: var(--color-coral-soft);
+  --acc-next: var(--color-amber);
+}
+.timeline-step:nth-child(4) {
+  --acc: var(--color-amber);
+  --acc-dark: var(--color-amber-dark);
+  --acc-soft: var(--color-amber-soft);
+}
 .timeline-step .tl-label {
   font-size: 0.72rem;
   font-weight: 700;
@@ -872,6 +900,8 @@ ul.plain { list-style: none; margin: 0; padding: 0; }
   border-radius: 100px;
   font-size: 0.82rem;
   font-weight: 600;
+  background: var(--acc-soft);
+  color: var(--acc-dark);
 }
 
 /* ---------- Approach subheadings & connected-levels cards ---------- */
