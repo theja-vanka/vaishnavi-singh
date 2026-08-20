@@ -205,15 +205,34 @@ ul.plain { list-style: none; margin: 0; padding: 0; }
   padding: 0;
 }
 .nav-links a {
+  position: relative;
   text-decoration: none;
   font-size: 0.88rem;
   color: var(--color-ink-soft);
   font-weight: 500;
   white-space: nowrap;
+  padding-bottom: 6px;
   transition: color 0.15s ease;
 }
 .nav-links a:hover,
 .nav-links a.active { color: var(--color-lavender-dark); }
+/* Horizontal bar under the current (or hovered) section link, growing in
+   from the left rather than just popping in. */
+.nav-links a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--color-lavender-dark);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.2s ease;
+}
+.nav-links a:hover::after,
+.nav-links a.active::after { transform: scaleX(1); }
 
 .nav-toggle {
   display: none;
@@ -2075,7 +2094,7 @@ body.lightbox-open { overflow: hidden; }
    ========================================================================== */
 @media (max-width: 920px) {
   .hero .container { grid-template-columns: 1fr; }
-  .hero-photo { max-width: 340px; margin: 0 auto; }
+  .hero-photo { order: -1 !important; max-width: 340px; margin: 0 auto 32px; }
   .grid-3 { grid-template-columns: 1fr 1fr; }
   .split { grid-template-columns: 1fr; }
   .split-media { order: -1 !important; max-width: 420px; margin: 0 auto 8px; }
