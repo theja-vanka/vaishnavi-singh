@@ -1221,22 +1221,106 @@ ul.plain { list-style: none; margin: 0; padding: 0; }
   margin-bottom: 10px;
 }
 
-/* ---------- About values ---------- */
-.values-grid {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 18px;
+/* ---------- About values (3D coverflow carousel) ---------- */
+/* The spread/depth live in custom properties so narrower screens can simply
+   pull the cards closer in rather than switching to a different layout. */
+.values-carousel {
+  --vc-card-w: 250px;
+  --vc-x1: 210px;   /* how far the immediate neighbours sit from centre */
+  --vc-x2: 368px;   /* ...and the outer pair */
+  --vc-z1: -130px;  /* how far back they sit */
+  --vc-z2: -260px;
+  --vc-rot: 26deg;
+  position: relative;
   margin-top: 8px;
 }
+.values-stage {
+  position: relative;
+  height: 190px;
+  perspective: 1100px;
+  transform-style: preserve-3d;
+}
 .value-item {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: var(--vc-card-w);
   text-align: center;
-  padding: 18px 10px;
+  padding: 18px 16px;
   border: 1px solid var(--color-border);
   border-top: 3px solid var(--color-border);
   border-radius: var(--radius);
   background: var(--color-card);
-  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  transform: translate(-50%, -50%);
+  transition: transform 0.5s cubic-bezier(0.22, 0.61, 0.36, 1),
+              opacity 0.5s ease,
+              box-shadow 0.3s ease,
+              border-color 0.2s ease;
 }
+/* Position-driven 3D placement; JS only sets data-pos on each card. */
+.value-item[data-pos="0"] {
+  transform: translate(-50%, -50%) translateZ(0) scale(1);
+  opacity: 1;
+  z-index: 5;
+  box-shadow: var(--shadow-md);
+  cursor: default;
+}
+.value-item[data-pos="1"] {
+  transform: translate(-50%, -50%) translateX(var(--vc-x1)) translateZ(var(--vc-z1)) rotateY(calc(-1 * var(--vc-rot))) scale(0.9);
+  opacity: 0.72;
+  z-index: 4;
+}
+.value-item[data-pos="-1"] {
+  transform: translate(-50%, -50%) translateX(calc(-1 * var(--vc-x1))) translateZ(var(--vc-z1)) rotateY(var(--vc-rot)) scale(0.9);
+  opacity: 0.72;
+  z-index: 4;
+}
+.value-item[data-pos="2"] {
+  transform: translate(-50%, -50%) translateX(var(--vc-x2)) translateZ(var(--vc-z2)) rotateY(calc(-1 * var(--vc-rot))) scale(0.8);
+  opacity: 0.4;
+  z-index: 3;
+}
+.value-item[data-pos="-2"] {
+  transform: translate(-50%, -50%) translateX(calc(-1 * var(--vc-x2))) translateZ(var(--vc-z2)) rotateY(var(--vc-rot)) scale(0.8);
+  opacity: 0.4;
+  z-index: 3;
+}
+.values-nav {
+  position: absolute;
+  top: 95px;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-ink);
+  cursor: pointer;
+  z-index: 6;
+  transition: background 0.2s ease;
+}
+.values-nav:hover { background: var(--color-bg-alt); }
+.values-nav svg { width: 18px; height: 18px; }
+.values-prev { left: 0; }
+.values-next { right: 0; }
+.values-dots { display: flex; justify-content: center; gap: 9px; margin-top: 18px; }
+.values-dot {
+  width: 9px;
+  height: 9px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--color-border);
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+.values-dot.is-active { background: var(--color-lavender); transform: scale(1.3); }
 .value-item:nth-child(1) { border-top-color: var(--color-lavender); }
 .value-item:nth-child(2) { border-top-color: var(--color-teal); }
 .value-item:nth-child(3) { border-top-color: var(--color-coral); }
@@ -1752,7 +1836,14 @@ body.lightbox-open { overflow: hidden; }
   .engagement-block, .engagement-block.reverse { grid-template-columns: 1fr; }
   .engagement-media { order: -1 !important; max-width: 420px; margin: 0 auto; }
   .contact-grid { grid-template-columns: 1fr; gap: 32px; }
-  .values-grid { grid-template-columns: repeat(3, 1fr); }
+  .values-carousel {
+    --vc-x1: 140px;
+    --vc-x2: 240px;
+    --vc-z1: -150px;
+    --vc-z2: -290px;
+  }
+  .value-item[data-pos="1"], .value-item[data-pos="-1"] { opacity: 0.55; }
+  .value-item[data-pos="2"], .value-item[data-pos="-2"] { opacity: 0.3; }
   .explore-gallery { grid-template-columns: repeat(2, 1fr); }
   .case-prev { left: 8px; }
   .case-next { right: 8px; }
@@ -1774,6 +1865,23 @@ body.lightbox-open { overflow: hidden; }
   .lightbox-btn svg { width: 15px; height: 15px; }
   .lightbox-zoom-level { font-size: 0.66rem; min-width: 38px; }
   .case-nav { width: 38px; height: 38px; }
+  /* Same carousel, just collapsed closer: the neighbours tuck in behind the
+     active card instead of spreading out beside it. */
+  .values-carousel {
+    --vc-card-w: 210px;
+    --vc-x1: 62px;
+    --vc-x2: 104px;
+    --vc-z1: -120px;
+    --vc-z2: -230px;
+    --vc-rot: 22deg;
+  }
+  .values-stage { height: 200px; }
+  .values-nav { top: 100px; width: 34px; height: 34px; }
+  .values-nav svg { width: 16px; height: 16px; }
+  /* Tucked this close, the neighbours' text would peek out from behind the
+     active card, so they read as depth rather than as content. */
+  .value-item[data-pos="1"], .value-item[data-pos="-1"] { opacity: 0.45; }
+  .value-item[data-pos="2"], .value-item[data-pos="-2"] { opacity: 0.22; }
 }
 
 @media (max-width: 880px) {
@@ -1798,7 +1906,6 @@ body.lightbox-open { overflow: hidden; }
   .grid-3, .grid-2 { grid-template-columns: 1fr; }
   .surface-zone { padding: 36px 24px; }
   .zone-grid { grid-template-columns: repeat(2, 1fr); gap: 22px 18px; }
-  .values-grid { grid-template-columns: repeat(2, 1fr); }
   .outcome-list { grid-template-columns: 1fr; }
   .sample-roles { grid-template-columns: 1fr; gap: 22px; }
   .sample-box { padding: 26px 22px; }

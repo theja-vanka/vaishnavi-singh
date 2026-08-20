@@ -366,4 +366,73 @@ document.addEventListener("DOMContentLoaded", function () {
     goToSlide(1, "instant"); // land on the real first card, skipping the prepended clone
     updateCaseState();
   }
+
+  // ---------- Values 3D coverflow carousel ----------
+  var valuesCarousel = document.querySelector("[data-values-carousel]");
+  if (valuesCarousel) {
+    var valueCards = Array.prototype.slice.call(
+      valuesCarousel.querySelectorAll(".value-item")
+    );
+    var valuesDots = valuesCarousel.querySelector("[data-values-dots]");
+    var valuesActive = 0;
+
+    // Dots are built here rather than in the markup so they always match the
+    // number of cards.
+    valueCards.forEach(function (card, i) {
+      var dot = document.createElement("button");
+      dot.type = "button";
+      dot.className = "values-dot";
+      dot.setAttribute(
+        "aria-label",
+        "Show value: " + card.querySelector(".value-title").textContent
+      );
+      dot.addEventListener("click", function () { setValuesActive(i); });
+      valuesDots.appendChild(dot);
+    });
+    var valuesDotList = Array.prototype.slice.call(valuesDots.children);
+
+    function setValuesActive(index) {
+      var count = valueCards.length;
+      valuesActive = ((index % count) + count) % count;
+      valueCards.forEach(function (card, i) {
+        // Signed distance from the active card, wrapped so the ring is
+        // continuous: with 5 cards the positions run -2..2.
+        var rel = (i - valuesActive + count) % count;
+        if (rel > count / 2) { rel -= count; }
+        card.setAttribute("data-pos", rel);
+        card.setAttribute("aria-current", rel === 0 ? "true" : "false");
+      });
+      valuesDotList.forEach(function (dot, i) {
+        dot.classList.toggle("is-active", i === valuesActive);
+      });
+    }
+
+    // Clicking a card off to the side brings it to the front.
+    valueCards.forEach(function (card, i) {
+      card.addEventListener("click", function () { setValuesActive(i); });
+    });
+
+    var valuesPrev = valuesCarousel.querySelector("[data-values-prev]");
+    var valuesNext = valuesCarousel.querySelector("[data-values-next]");
+    if (valuesPrev) {
+      valuesPrev.addEventListener("click", function () { setValuesActive(valuesActive - 1); });
+    }
+    if (valuesNext) {
+      valuesNext.addEventListener("click", function () { setValuesActive(valuesActive + 1); });
+    }
+
+    // Swipe, so the collapsed mobile layout stays usable without the arrows.
+    var valuesTouchX = null;
+    valuesCarousel.addEventListener("touchstart", function (e) {
+      valuesTouchX = e.changedTouches[0].clientX;
+    }, { passive: true });
+    valuesCarousel.addEventListener("touchend", function (e) {
+      if (valuesTouchX === null) { return; }
+      var dx = e.changedTouches[0].clientX - valuesTouchX;
+      if (Math.abs(dx) > 40) { setValuesActive(valuesActive + (dx < 0 ? 1 : -1)); }
+      valuesTouchX = null;
+    }, { passive: true });
+
+    setValuesActive(0);
+  }
 });
