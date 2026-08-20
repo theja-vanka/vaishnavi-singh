@@ -1050,66 +1050,107 @@ ul.plain { list-style: none; margin: 0; padding: 0; }
 .status.ongoing { background: var(--color-navy-soft); color: var(--color-navy); }
 
 /* ---------- Case studies ---------- */
+/* Each card is a gradient banner (identity + icon) over a plain body — a
+   distinct "cover" per school rather than the flat top-border-only cards used
+   elsewhere on the site. One --acc trio per card drives the gradient, the
+   icon ring, the topic markers and the quote mark, so nothing is repeated by
+   hand. Explicit per-card classes (not :nth-child) survive the carousel JS
+   cloning the first/last card into the seamless loop — cloneNode copies them. */
 .case-card {
   position: relative;
   background: var(--color-card);
   border: 1px solid var(--color-border);
-  border-top: 3px solid var(--color-border);
-  border-radius: var(--radius);
-  padding: 28px;
+  border-radius: 18px;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow 0.25s ease, transform 0.25s ease;
 }
-.case-card-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 14px;
+.case-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+
+.case-banner {
+  position: relative;
+  padding: 32px 28px 28px;
+  color: #fff;
+  overflow: hidden;
 }
-.case-card-head .icon-badge { margin-bottom: 0; }
-/* Explicit per-card classes rather than :nth-child — the carousel JS clones
-   the first/last card to build a seamless loop, which shifts DOM position
-   but keeps these classes (cloneNode copies them), so the colors stay correct. */
-.case-card-1 { border-top-color: var(--color-lavender); }
-.case-card-1 .case-index { color: var(--color-lavender); }
-.case-card-1 .icon-badge { background: var(--color-lavender-soft); }
-.case-card-1 .icon-badge svg { color: var(--color-lavender-dark); }
-.case-card-1 .case-sub { background: var(--color-lavender-soft); color: var(--color-lavender-dark); }
-.case-card-1 .case-list li::before { background: var(--color-lavender); }
-.case-card-2 { border-top-color: var(--color-teal); }
-.case-card-2 .case-index { color: var(--color-teal); }
-.case-card-2 .icon-badge { background: var(--color-teal-soft); }
-.case-card-2 .icon-badge svg { color: var(--color-teal-dark); }
-.case-card-2 .case-sub { background: var(--color-teal-soft); color: var(--color-teal-dark); }
-.case-card-2 .case-list li::before { background: var(--color-teal); }
-.case-card-3 { border-top-color: var(--color-coral); }
-.case-card-3 .case-index { color: var(--color-coral); }
-.case-card-3 .icon-badge { background: var(--color-coral-soft); }
-.case-card-3 .icon-badge svg { color: var(--color-coral-dark); }
-.case-card-3 .case-sub { background: var(--color-coral-soft); color: var(--color-coral-dark); }
-.case-card-3 .case-list li::before { background: var(--color-coral); }
-.case-card .case-index {
-  font-family: var(--font-display);
-  font-size: 0.9rem;
-  font-weight: 700;
+/* A dot grid gives the banner texture, but only as a corner accent that fades
+   out — never sitting behind the title/pill, where it competed with the text. */
+.case-banner::before {
+  content: "";
+  position: absolute;
+  top: -30px;
+  right: -30px;
+  width: 200px;
+  height: 200px;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.4) 1.5px, transparent 1.5px);
+  background-size: 16px 16px;
+  -webkit-mask-image: radial-gradient(circle at top right, #000 0%, #000 35%, transparent 72%);
+  mask-image: radial-gradient(circle at top right, #000 0%, #000 35%, transparent 72%);
+  pointer-events: none;
 }
-.case-card h3 { margin-bottom: 8px; }
-.case-card .case-sub {
+.case-banner h3 {
+  position: relative;
+  margin: 0 0 10px;
+  color: #fff;
+  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.12);
+}
+.case-banner .case-sub {
+  position: relative;
   display: inline-block;
   font-size: 0.78rem;
   font-weight: 600;
   font-style: normal;
   padding: 5px 12px;
   border-radius: 999px;
-  margin-bottom: 18px;
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+  margin-bottom: 0;
 }
+
+.case-card-1 {
+  --acc: var(--color-lavender);
+  --acc-dark: var(--color-lavender-dark);
+  --acc-soft: var(--color-lavender-soft);
+}
+.case-card-1 .case-banner { background: linear-gradient(135deg, var(--color-lavender) 0%, #4a3f96 100%); }
+.case-card-1 .case-list li::before { background: var(--color-lavender); }
+.case-card-1 .case-body h5 { color: var(--color-lavender-dark); }
+.case-card-1 .note::before { color: var(--color-lavender-soft); }
+
+.case-card-2 {
+  --acc: var(--color-teal);
+  --acc-dark: var(--color-teal-dark);
+  --acc-soft: var(--color-teal-soft);
+}
+.case-card-2 .case-banner { background: linear-gradient(135deg, var(--color-teal) 0%, #0a5a4d 100%); }
+.case-card-2 .case-list li::before { background: var(--color-teal); }
+.case-card-2 .case-body h5 { color: var(--color-teal-dark); }
+.case-card-2 .note::before { color: var(--color-teal-soft); }
+
+.case-card-3 {
+  --acc: var(--color-coral);
+  --acc-dark: var(--color-coral-dark);
+  --acc-soft: var(--color-coral-soft);
+}
+.case-card-3 .case-banner { background: linear-gradient(135deg, var(--color-coral) 0%, #a8256e 100%); }
+.case-card-3 .case-list li::before { background: var(--color-coral); }
+.case-card-3 .case-body h5 { color: var(--color-coral-dark); }
+.case-card-3 .note::before { color: var(--color-coral-soft); }
+
+.case-body { padding: 26px 28px 28px; display: flex; flex-direction: column; flex: 1; }
+.case-main { display: flex; flex-direction: column; }
+/* On narrow screens the quote just sits at the bottom of the stack, as it
+   always has. On wide cards (below) it becomes its own panel instead. */
+.case-highlight { margin-top: auto; padding-top: 20px; }
 .case-card h5 {
   font-size: 0.72rem;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  color: var(--color-navy);
-  margin: 16px 0 8px;
+  margin: 0 0 8px;
 }
+.case-body .case-contribution h5 { margin-top: 18px; }
 .case-card .contribution { font-size: 0.92rem; }
 .case-list { list-style: none; margin: 0 0 8px; padding: 0; font-size: 0.92rem; color: var(--color-ink-soft); }
 .case-list li { position: relative; padding-left: 16px; margin-bottom: 6px; }
@@ -1125,7 +1166,6 @@ ul.plain { list-style: none; margin: 0; padding: 0; }
 }
 .case-card .note {
   position: relative;
-  margin-top: auto;
   padding-top: 20px;
   font-family: var(--font-display);
   font-style: italic;
@@ -1143,6 +1183,48 @@ ul.plain { list-style: none; margin: 0; padding: 0; }
   font-style: normal;
   line-height: 1;
   color: var(--color-border);
+}
+
+/* A wide card leaves the single narrow text column stranded on the left with
+   a dead strip of white on the right, so beyond tablet width the body splits
+   into a reading column and a highlight panel that turns the pull-quote into
+   an actual design element instead of a line of italic type at the bottom. */
+@media (min-width: 720px) {
+  .case-body {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+    align-items: stretch;
+    gap: 32px;
+  }
+  .case-highlight {
+    margin-top: 0;
+    padding: 28px 26px;
+    border-radius: 14px;
+    background: var(--acc-soft);
+    display: flex;
+    align-items: center;
+  }
+  .case-highlight .note {
+    padding-top: 30px;
+    border-top: 0;
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+  .case-highlight .note::before {
+    top: 4px;
+    font-size: 2.6rem;
+    color: var(--acc);
+    opacity: 0.55;
+  }
+}
+/* The list only splits into two columns once the reading column itself is
+   wide enough to take it without cramming each item into an awkward wrap. */
+@media (min-width: 1000px) {
+  .case-list {
+    columns: 2;
+    column-gap: 28px;
+  }
+  .case-list li { break-inside: avoid; }
 }
 
 /* ---------- Case studies carousel ---------- */
@@ -1415,11 +1497,6 @@ ul.plain { list-style: none; margin: 0; padding: 0; }
 .value-item:nth-child(3) { border-top-color: var(--color-coral); }
 .value-item:nth-child(4) { border-top-color: var(--color-amber); }
 .value-item:nth-child(5) { border-top-color: var(--color-navy); }
-.value-item:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-sm);
-  border-color: rgba(124, 111, 207, 0.35);
-}
 .value-item .value-title {
   font-weight: 700;
   margin-bottom: 6px;
